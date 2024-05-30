@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>StudyTube</title>
+    <link rel="stylesheet" type="text/css" href="../static/styles.css">
+</head>
+
+<body class="san-serif">
+    <header class="flex align-center space-between">
+        <h1>StudyTube</h1>
+        <form method="post" action="/search" id="searchForm" onsubmit="onSubmit(event)">
+            <input type="text" placeholder="Search for any topic..." name="search" spellcheck="false"/>
+        </form>        
+    </header>
+    <div class="container">
+        <div class="loaderContainer"></div>
+        <div class="gridContainer">
+            {%for link in videos_list%}
+            <iframe src={{link}} title="YouTube video player" loading="lazy" frameborder="0"
+                referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            {%endfor%}
+        </div>
+    </div>
+    <script>
+        function onSubmit(event) {
+            const grids = document.querySelectorAll('.gridContainer');
+            let isEmpty = false;
+            grids.forEach(grid => {
+                const iframes = grid.querySelectorAll('iframe');
+                iframes.forEach(iframe => {
+                    iframe.remove();
+                });
+                isEmpty = true;
+            });
+            if (isEmpty) {
+                const loader = document.querySelector('.loaderContainer');
+                loader.innerHTML = '<p class="loaderMessage">Please wait, fetching data...</p>';
+                loader.classList.add('loaderContainerActive');
+            }
+        };
+    </script>
+</body>
+
+</html>
